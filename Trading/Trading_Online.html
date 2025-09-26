@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trading Platform - Investment Hub</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            box-sizing: border-box;
+        }
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .card-shadow {
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+        .pulse-animation {
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+    </style>
+</head>
+<body class="bg-gray-50 font-sans">
+    <!-- Header -->
+    <header class="gradient-bg text-white py-6 shadow-lg">
+        <div class="container mx-auto px-4">
+            <div class="flex justify-between items-center">
+                <h1 class="text-3xl font-bold">💰 Trading Platform</h1>
+                <div class="flex items-center space-x-4">
+                    <span id="userBalance" class="bg-white/20 px-4 py-2 rounded-lg">Balance: 0 RWF</span>
+                    <button id="loginBtn" class="bg-white text-purple-600 px-6 py-2 rounded-lg font-semibold hover:bg-gray-100 transition">Login</button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 py-8">
+        <!-- Registration Section -->
+        <div id="registerSection" class="max-w-md mx-auto bg-white rounded-xl card-shadow p-8 mb-8">
+            <h2 class="text-2xl font-bold text-center mb-6 text-gray-800">📝 Create Account</h2>
+            <form id="registerForm" class="space-y-4">
+                <div>
+                    <label class="block text-gray-700 font-medium mb-2">Full Name</label>
+                    <input type="text" id="fullName" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent" placeholder="Enter your full name" required>
+                </div>
+                <div>
+                    <label class="block text-gray-700 font-medium mb-2">Phone Number</label>
+                    <input type="tel" id="userPhone" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent" placeholder="078XXXXXXX" required>
+                </div>
+                <div>
+                    <label class="block text-gray-700 font-medium mb-2">Email (optional)</label>
+                    <input type="email" id="userEmail" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent" placeholder="example@email.com">
+                </div>
+                <div>
+                    <label class="block text-gray-700 font-medium mb-2">Password</label>
+                    <input type="password" id="userPassword" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent" placeholder="Enter your password" required>
+                </div>
+                <button type="submit" class="w-full gradient-bg text-white py-3 rounded-lg font-semibold hover:opacity-90 transition">Create Account</button>
+            </form>
+            <p class="text-center mt-4 text-gray-600">
+                Already have an account? 
+                <button id="showLoginBtn" class="text-purple-600 font-semibold hover:underline">Login</button>
+            </p>
+        </div>
+
+        <!-- Login Section -->
+        <div id="loginSection" class="hidden max-w-md mx-auto bg-white rounded-xl card-shadow p-8 mb-8">
+            <h2 class="text-2xl font-bold text-center mb-6 text-gray-800">🔐 Login</h2>
+            <form id="loginForm" class="space-y-4">
+                <div>
+                    <label class="block text-gray-700 font-medium mb-2">Phone Number</label>
+                    <input type="tel" id="loginPhone" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent" placeholder="078XXXXXXX" required>
+                </div>
+                <div>
+                    <label class="block text-gray-700 font-medium mb-2">Password</label>
+                    <input type="password" id="loginPassword" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent" placeholder="Enter your password" required>
+                </div>
+                <button type="submit" class="w-full gradient-bg text-white py-3 rounded-lg font-semibold hover:opacity-90 transition">Login</button>
+            </form>
+            <p class="text-center mt-4 text-gray-600">
+                Don't have an account? 
+                <button id="showRegisterBtn" class="text-purple-600 font-semibold hover:underline">Create Account</button>
+            </p>
+        </div>
+
+        <!-- Trading Dashboard -->
+        <div id="dashboard" class="hidden">
+            <!-- Welcome Message -->
+            <div class="bg-white rounded-xl card-shadow p-6 mb-8">
+                <h2 class="text-2xl font-bold text-gray-800 mb-2">Welcome, <span id="welcomeName"></span>! 👋</h2>
+                <p class="text-gray-600">Thank you for joining our trading platform. You can deposit money and earn 10% profit on your investments.</p>
+            </div>
+
+            <!-- Stats Cards -->
+            <div class="grid md:grid-cols-3 gap-6 mb-8">
+                <div class="bg-white rounded-xl card-shadow p-6">
+                    <div class="flex items-center">
+                        <div class="bg-green-100 p-3 rounded-full">
+                            <span class="text-2xl">💰</span>
+                        </div>
+                        <div class="ml-4">
+                            <p class="text-gray-600">Your Balance</p>
+                            <p id="currentBalance" class="text-2xl font-bold text-green-600">0 RWF</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-white rounded-xl card-shadow p-6">
+                    <div class="flex items-center">
+                        <div class="bg-blue-100 p-3 rounded-full">
+                            <span class="text-2xl">📈</span>
+                        </div>
+                        <div class="ml-4">
+                            <p class="text-gray-600">Total Profit</p>
+                            <p id="totalProfit" class="text-2xl font-bold text-blue-600">0 RWF</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-white rounded-xl card-shadow p-6">
+                    <div class="flex items-center">
+                        <div class="bg-purple-100 p-3 rounded-full">
+                            <span class="text-2xl">🔄</span>
+                        </div>
+                        <div class="ml-4">
+                            <p class="text-gray-600">Total Trades</p>
+                            <p id="totalTrades" class="text-2xl font-bold text-purple-600">0</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Deposit Section -->
+            <div class="bg-white rounded-xl card-shadow p-8 mb-8">
+                <h3 class="text-xl font-bold text-gray-800 mb-6">💳 Make a Deposit</h3>
+                
+                <!-- Admin Contact Info -->
+                <div class="bg-gradient-to-r from-green-50 to-blue-50 border border-green-200 rounded-lg p-6 mb-6">
+                    <h4 class="font-bold text-gray-800 mb-3 flex items-center">
+                        <span class="text-2xl mr-2">📞</span>
+                        Admin USSD Code for Money Transfer
+                    </h4>
+                    <div class="bg-white rounded-lg p-4 border-2 border-green-300">
+                        <p class="text-2xl font-bold text-green-600 text-center">*182*8*1*1261484#</p>
+                        <p class="text-center text-gray-600 mt-2">Dial this USSD code to send money</p>
+                    </div>
+                    <div class="mt-4 text-sm text-gray-700">
+                        <p class="mb-2"><strong>How to make a deposit:</strong></p>
+                        <ol class="list-decimal list-inside space-y-1">
+                            <li>Dial <strong>*182*8*1*1261484#</strong> to send money</li>
+                            <li>Fill out the form below</li>
+                            <li>Admin will confirm your deposit</li>
+                            <li>Your investment will start</li>
+                        </ol>
+                    </div>
+                </div>
+
+                <div class="grid md:grid-cols-2 gap-8">
+                    <div>
+                        <form id="depositForm" class="space-y-4">
+                            <div>
+                                <label class="block text-gray-700 font-medium mb-2">Amount (RWF)</label>
+                                <input type="number" id="depositAmount" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent" placeholder="Enter amount you sent" min="1000" required>
+                            </div>
+                            <div>
+                                <label class="block text-gray-700 font-medium mb-2">Transaction ID/Reference</label>
+                                <input type="text" id="transactionId" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent" placeholder="Enter transaction ID" required>
+                            </div>
+                            <div>
+                                <label class="block text-gray-700 font-medium mb-2">Return Period (hours)</label>
+                                <select id="returnTime" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent">
+                                    <option value="1">1 hour - 10% profit</option>
+                                    <option value="6">6 hours - 10% profit</option>
+                                    <option value="24">24 hours - 10% profit</option>
+                                </select>
+                            </div>
+                            <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+                                <p class="text-sm text-yellow-800">
+                                    <strong>Note:</strong> Before clicking "Confirm Deposit", make sure you have dialed *182*8*1*1261484# to send money
+                                </p>
+                            </div>
+                            <button type="submit" class="w-full gradient-bg text-white py-3 rounded-lg font-semibold hover:opacity-90 transition">Confirm Deposit</button>
+                        </form>
+                    </div>
+                    <div class="bg-gray-50 rounded-lg p-6">
+                        <h4 class="font-semibold text-gray-800 mb-4">📊 Trading Features</h4>
+                        <ul class="space-y-2 text-gray-600">
+                            <li>✅ 10% profit on all investments</li>
+                            <li>✅ Returns within specified time</li>
+                            <li>✅ Secure money handling</li>
+                            <li>✅ Reliable trading system</li>
+                            <li>✅ Admin returns money via USSD</li>
+                        </ul>
+                        
+                        <div class="mt-6 p-4 bg-blue-50 rounded-lg">
+                            <h5 class="font-semibold text-blue-800 mb-2">Example:</h5>
+                            <p class="text-sm text-blue-700">
+                                If you send 10,000 RWF, you'll receive 11,000 RWF (1,000 RWF profit)
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Active Investments -->
+            <div class="bg-white rounded-xl card-shadow p-8">
+                <h3 class="text-xl font-bold text-gray-800 mb-6">🔄 Your Investments</h3>
+                <div id="investmentsList" class="space-y-4">
+                    <p class="text-gray-500 text-center py-8">No active investments. Start by making a deposit!</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Success Modal -->
+    <div id="successModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+        <div class="bg-white rounded-xl p-8 max-w-md mx-4">
+            <div class="text-center">
+                <div class="text-6xl mb-4">✅</div>
+                <h3 class="text-xl font-bold text-gray-800 mb-2">Success!</h3>
+                <p id="successMessage" class="text-gray-600 mb-6"></p>
+                <button id="closeModal" class="gradient-bg text-white px-6 py-2 rounded-lg font-semibold hover:opacity-90 transition">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentUser = null;
+        let userBalance = 0;
+        let totalProfit = 0;
+        let totalTrades = 0;
+        let investments = [];
+        let registeredUsers = []; // Store registered users
+
+        // Registration functionality
+        document.getElementById('registerForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const fullName = document.getElementById('fullName').value;
+            const phone = document.getElementById('userPhone').value;
+            const email = document.getElementById('userEmail').value;
+            const password = document.getElementById('userPassword').value;
+            
+            // Check if user already exists
+            const existingUser = registeredUsers.find(user => user.phone === phone);
+            if (existingUser) {
+                alert('This user is already registered. Please try logging in.');
+                return;
+            }
+            
+            // Register new user
+            const newUser = {
+                fullName,
+                phone,
+                email,
+                password,
+                registrationDate: new Date(),
+                balance: 0,
+                totalProfit: 0,
+                totalTrades: 0,
+                investments: []
+            };
+            
+            registeredUsers.push(newUser);
+            showSuccessModal(`Successfully registered, ${fullName}! You can now login.`);
+            
+            // Switch to login form
+            document.getElementById('registerSection').classList.add('hidden');
+            document.getElementById('loginSection').classList.remove('hidden');
+            document.getElementById('registerForm').reset();
+        });
+
+        // Login functionality
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const phone = document.getElementById('loginPhone').value;
+            const password = document.getElementById('loginPassword').value;
+            
+            // Find user
+            const user = registeredUsers.find(u => u.phone === phone && u.password === password);
+            if (!user) {
+                alert('Phone number or password is incorrect. Please try again.');
+                return;
+            }
+            
+            // Login successful
+            currentUser = user;
+            userBalance = user.balance;
+            totalProfit = user.totalProfit;
+            totalTrades = user.totalTrades;
+            investments = user.investments || [];
+            
+            document.getElementById('welcomeName').textContent = user.fullName;
+            document.getElementById('loginSection').classList.add('hidden');
+            document.getElementById('registerSection').classList.add('hidden');
+            document.getElementById('dashboard').classList.remove('hidden');
+            document.getElementById('loginBtn').textContent = 'Logout';
+            
+            updateDisplay();
+            displayInvestments();
+            
+            // Restart any active investment countdowns
+            investments.forEach(investment => {
+                if (investment.status === 'active') {
+                    startInvestmentCountdown(investment);
+                }
+            });
+            
+            showSuccessModal(`Welcome back, ${user.fullName}!`);
+        });
+
+        // Toggle between register and login forms
+        document.getElementById('showLoginBtn').addEventListener('click', function() {
+            document.getElementById('registerSection').classList.add('hidden');
+            document.getElementById('loginSection').classList.remove('hidden');
+        });
+
+        document.getElementById('showRegisterBtn').addEventListener('click', function() {
+            document.getElementById('loginSection').classList.add('hidden');
+            document.getElementById('registerSection').classList.remove('hidden');
+        });
+
+        // Deposit functionality
+        document.getElementById('depositForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const amount = parseInt(document.getElementById('depositAmount').value);
+            const transactionId = document.getElementById('transactionId').value;
+            const returnTime = parseInt(document.getElementById('returnTime').value);
+            
+            if (amount < 1000) {
+                alert('Amount must be at least 1,000 RWF');
+                return;
+            }
+
+            if (!transactionId.trim()) {
+                alert('Please enter Transaction ID/Reference');
+                return;
+            }
+
+            const investment = {
+                id: Date.now(),
+                amount: amount,
+                transactionId: transactionId,
+                returnTime: returnTime,
+                profit: Math.floor(amount * 0.1),
+                totalReturn: amount + Math.floor(amount * 0.1),
+                startTime: new Date(),
+                endTime: new Date(Date.now() + returnTime * 60 * 60 * 1000),
+                status: 'pending', // Start as pending until admin confirms
+                userPhone: currentUser.phone
+            };
+
+            investments.push(investment);
+            currentUser.investments = investments;
+            totalTrades++;
+            
+            updateDisplay();
+            displayInvestments();
+            
+            showSuccessModal(`Deposit yawe ya ${amount.toLocaleString()} RWF yoherejwe kuri admin. Transaction ID: ${transactionId}. Admin azaguha confirmation vuba.`);
+            
+            // Simulate admin confirmation after 30 seconds (in real app, this would be manual)
+            setTimeout(() => {
+                const pendingInvestment = investments.find(inv => inv.id === investment.id);
+                if (pendingInvestment && pendingInvestment.status === 'pending') {
+                    pendingInvestment.status = 'active';
+                    startInvestmentCountdown(pendingInvestment);
+                    showSuccessModal(`Admin yemeje deposit yawe ya ${amount.toLocaleString()} RWF! Ubucuruzi bwatangiye.`);
+                    displayInvestments();
+                }
+            }, 30000); // 30 seconds simulation
+            
+            document.getElementById('depositForm').reset();
+        });
+
+        function startInvestmentCountdown(investment) {
+            const countdown = setInterval(() => {
+                const now = new Date().getTime();
+                const endTime = investment.endTime.getTime();
+                const timeLeft = endTime - now;
+
+                if (timeLeft <= 0) {
+                    // Investment completed
+                    investment.status = 'completed';
+                    userBalance += investment.totalReturn;
+                    totalProfit += investment.profit;
+                    
+                    updateDisplay();
+                    displayInvestments();
+                    
+                    showSuccessModal(`Ubucuruzi bwarangiye! Mwaronse ${investment.totalReturn.toLocaleString()} RWF (inyungu: ${investment.profit.toLocaleString()} RWF)`);
+                    
+                    clearInterval(countdown);
+                } else {
+                    displayInvestments();
+                }
+            }, 1000);
+        }
+
+        function displayInvestments() {
+            const container = document.getElementById('investmentsList');
+            
+            if (investments.length === 0) {
+                container.innerHTML = '<p class="text-gray-500 text-center py-8">Nta bucuruzi bwawe. Tangira gushyira amafaranga!</p>';
+                return;
+            }
+
+            container.innerHTML = investments.map(investment => {
+                const now = new Date().getTime();
+                const endTime = investment.endTime.getTime();
+                const timeLeft = endTime - now;
+                
+                let timeDisplay = '';
+                let statusClass = '';
+                let statusText = '';
+
+                if (investment.status === 'pending') {
+                    statusClass = 'bg-yellow-100 text-yellow-800 pulse-animation';
+                    statusText = 'Gutegereza admin ⏳';
+                    timeDisplay = 'Gutegereza confirmation';
+                } else if (investment.status === 'completed') {
+                    statusClass = 'bg-green-100 text-green-800';
+                    statusText = 'Byarangiye ✅';
+                    timeDisplay = 'Byasubijwe';
+                } else if (timeLeft > 0) {
+                    const hours = Math.floor(timeLeft / (1000 * 60 * 60));
+                    const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+                    const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+                    
+                    statusClass = 'bg-blue-100 text-blue-800 pulse-animation';
+                    statusText = 'Birakora 🔄';
+                    timeDisplay = `${hours}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                } else {
+                    statusClass = 'bg-green-100 text-green-800';
+                    statusText = 'Byarangiye ✅';
+                    timeDisplay = 'Byasubijwe';
+                }
+
+                return `
+                    <div class="border border-gray-200 rounded-lg p-4">
+                        <div class="flex justify-between items-start mb-3">
+                            <div>
+                                <p class="font-semibold text-gray-800">${investment.amount.toLocaleString()} RWF</p>
+                                <p class="text-sm text-gray-600">Inyungu: ${investment.profit.toLocaleString()} RWF</p>
+                                ${investment.transactionId ? `<p class="text-xs text-gray-500">ID: ${investment.transactionId}</p>` : ''}
+                            </div>
+                            <span class="px-3 py-1 rounded-full text-sm font-medium ${statusClass}">${statusText}</span>
+                        </div>
+                        <div class="flex justify-between items-center text-sm text-gray-600">
+                            <span>Igihe gisigaye: ${timeDisplay}</span>
+                            <span class="font-semibold text-green-600">↗ ${investment.totalReturn.toLocaleString()} RWF</span>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function updateDisplay() {
+            document.getElementById('currentBalance').textContent = `${userBalance.toLocaleString()} RWF`;
+            document.getElementById('userBalance').textContent = `Amafaranga: ${userBalance.toLocaleString()} RWF`;
+            document.getElementById('totalProfit').textContent = `${totalProfit.toLocaleString()} RWF`;
+            document.getElementById('totalTrades').textContent = totalTrades;
+        }
+
+        function showSuccessModal(message) {
+            document.getElementById('successMessage').textContent = message;
+            document.getElementById('successModal').classList.remove('hidden');
+        }
+
+        // Modal close functionality
+        document.getElementById('closeModal').addEventListener('click', function() {
+            document.getElementById('successModal').classList.add('hidden');
+        });
+
+        // Login/Logout button
+        document.getElementById('loginBtn').addEventListener('click', function() {
+            if (currentUser) {
+                // Save user data before logout
+                const userIndex = registeredUsers.findIndex(u => u.phone === currentUser.phone);
+                if (userIndex !== -1) {
+                    registeredUsers[userIndex].balance = userBalance;
+                    registeredUsers[userIndex].totalProfit = totalProfit;
+                    registeredUsers[userIndex].totalTrades = totalTrades;
+                    registeredUsers[userIndex].investments = investments;
+                }
+                
+                // Logout
+                currentUser = null;
+                userBalance = 0;
+                totalProfit = 0;
+                totalTrades = 0;
+                investments = [];
+                
+                document.getElementById('dashboard').classList.add('hidden');
+                document.getElementById('registerSection').classList.remove('hidden');
+                document.getElementById('loginBtn').textContent = 'Kwinjira';
+                document.getElementById('loginForm').reset();
+                updateDisplay();
+            }
+        });
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'98531425340b95fa',t:'MTc1ODg5MzAzNy4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
